@@ -6,39 +6,39 @@ const Message = require('../models/Message').model
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('myTotalySecretKey');
 
-
-/*
-const encryptedString = cryptr.encrypt('bacon');
-const decryptedString = cryptr.decrypt(encryptedString);
- 
-console.log(encryptedString); // 5590fd6409be2494de0226f5d7
-console.log(decryptedString); // bacon
-*/
-
 router.post('/login/', function (req, res) {
     const username = req.body.username
     const password = req.body.password
-    console.log("new User")
+
     let passE = cryptr.encrypt(password)
+    console.log(passE)
     let passD = cryptr.decrypt(passE)
 
-    
-    User.findOne({ name: username }, function (err, existingUser) {
 
+    User.findOne({ name: username }, function (err, existingUser) {
         const user = existingUser ?
             existingUser :
             new User({ name: username, friends: [], messages: [], password: passE })
+        console.log("new User")
 
         if (!existingUser) {
-            console.log("save User")
+            console.log("Save User")
             user.save()
         }
-        else{
-            
+        else {
+            User.findOne({ name: username }, function (err, user) {
+                if (password == cryptr.decrypt(user.password)) {
+                    console.log("user")
+                    res.send(user)
+                }
+                else {
+                    console.log(err)
+                    res.send(err)
+                }
+            })
+
         }
 
-
-        res.send(user)
     })
 })
 

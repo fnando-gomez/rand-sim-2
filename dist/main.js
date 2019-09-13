@@ -7,7 +7,6 @@ MESSAGES_TEMPLATE = "messages-template"
 MESSAGE_AREA = "messages-area"
 
 const render = (templateID, data, destination) => renderer.render(templateID, data, destination)
-let user
 
 const logIn = function () {
     const username = $("#username").val()
@@ -16,10 +15,14 @@ const logIn = function () {
 
     $.post('/login', { username, password }, function (u) {
         user = new User(username)
-
+        if(!u){
+            alert("Incorrect password")
+        }
+        else{
         render(LOGIN_TEMPLATE, { isLoggedIn: true, username }, LOGIN_AREA)
 
         render(MESSAGES_TEMPLATE, { messages: u.messages }, MESSAGE_AREA)
+        }
     })
 }
 
