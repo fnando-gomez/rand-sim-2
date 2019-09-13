@@ -11,9 +11,14 @@ let user
 
 const logIn = function () {
     const username = $("#username").val()
-    $.post('/login', { username }, function (u) {
+    const password = $("#password").val()
+
+
+    $.post('/login', { username, password }, function (u) {
         user = new User(username)
+
         render(LOGIN_TEMPLATE, { isLoggedIn: true, username }, LOGIN_AREA)
+
         render(MESSAGES_TEMPLATE, { messages: u.messages }, MESSAGE_AREA)
     })
 }
@@ -23,6 +28,7 @@ const logOut = function () {
     render(LOGIN_TEMPLATE, { isLoggedIn: false }, LOGIN_AREA)
     renderer.clear()
 }
+
 
 const sendMessage = function () {
     const completeRequest = user.sendMessage($("#new-message").val(), $("#to").val())

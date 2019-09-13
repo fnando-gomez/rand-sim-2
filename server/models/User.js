@@ -3,9 +3,10 @@ const message = require('./Message')
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
-    name: String,
+    name: {type: String, default: true},
     friends: [this],
-    messages: [message.schema]
+    messages: [message.schema],
+    password: {type: String, default: true}
 })
 
 const User = mongoose.model("User", userSchema)
